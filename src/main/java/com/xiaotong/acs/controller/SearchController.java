@@ -1,10 +1,16 @@
 package com.xiaotong.acs.controller;
 
+import com.google.gson.Gson;
+import com.xiaotong.acs.domain.QueryResult;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 import com.xiaotong.acs.function.graph.EdgeNode;
 import com.xiaotong.acs.function.graph.Vertex;
 import com.xiaotong.acs.function.index.AdvancedIndex;
 import com.xiaotong.acs.function.index.TNode;
+import com.xiaotong.acs.function.jsonread.Edge;
+import com.xiaotong.acs.function.jsonread.GraphData;
+import com.xiaotong.acs.function.jsonread.Node;
+import com.xiaotong.acs.function.jsonread.ReadJsonFile;
 import com.xiaotong.acs.function.kcore.Decomposition;
 import com.xiaotong.acs.function.kcore.NullDegException;
 import com.xiaotong.acs.function.query.DecQuery;
@@ -14,41 +20,37 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-import java.util.Set;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 @RestController
 @RequestMapping("/graph")
 public class SearchController {
     private static DecQuery decQuery;
+    private static Map<String, Integer> nodeToindex;
+    private static String graphJson;
 
     @RequestMapping("/init")
-    public static void init() {
-        int vertexNum = 10;
+    public static void init() throws FileNotFoundException {
+        GraphData graphData = ReadJsonFile.getGraphData();
+        List<Node> nodes = graphData.getNodes();
+        List<Edge> edges = graphData.getEdges();
+
+        Gson gson = new Gson();
+        graphJson = gson.toJson(graphData);
+
+        int vertexNum = nodes.size();
+        nodeToindex = new HashMap<>();
         AdjacencyList graph = new AdjacencyList(vertexNum);
-        graph.insertVertex(new Vertex("w, x, y"));
-        graph.insertVertex(new Vertex("x"));
-        graph.insertVertex(new Vertex("x, y"));
-        graph.insertVertex(new Vertex("x, y, z"));
-        graph.insertVertex(new Vertex("x, y, z"));
-        graph.insertVertex(new Vertex("y"));
-        graph.insertVertex(new Vertex("x, y"));
-        graph.insertVertex(new Vertex("y, z"));
-        graph.insertVertex(new Vertex("x"));
-        graph.insertVertex(new Vertex("x"));
-
-        graph.insertEdge(new EdgeNode(0, 1));
-        graph.insertEdge(new EdgeNode(0, 2));
-        graph.insertEdge(new EdgeNode(0, 3));
-        graph.insertEdge(new EdgeNode(0, 4));
-        graph.insertEdge(new EdgeNode(1, 4));
-        graph.insertEdge(new EdgeNode(4, 6));
-        graph.insertEdge(new EdgeNode(3, 1));
-        graph.insertEdge(new EdgeNode(2, 1));
-        graph.insertEdge(new EdgeNode(3, 2));
-        graph.insertEdge(new EdgeNode(3, 5));
-        graph.insertEdge(new EdgeNode(7, 8));
-
+        for (int i = 0; i < vertexNum; i ++) {
+            String id = nodes.get(i).getId();
+            String keywords = nodes.get(i).getKeywords();
+            graph.insertVertex(new Vertex(id, keywords));
+            nodeToindex.put(id, i);
+        }
+        for (Edge edge : edges) {
+            graph.insertEdge(new EdgeNode(nodeToindex.get(edge.getSource()), nodeToindex.get(edge.getTarget())));
+        }
 
         Decomposition de = new Decomposition(graph);
         int[] deg = de.coresDecomposition();
@@ -68,13 +70,30 @@ public class SearchController {
     }
 
     @RequestMapping("/search/{queryVertex}/{queryK}/{queryS}")
-    public static Map<Set<String>, Set<Integer>> search(
-            @PathVariable int queryVertex,
+    public static QueryResult search(
+            @PathVariable String queryVertex,
             @PathVariable int queryK,
-            @PathVariable String queryS) throws ErrorInputException, NullSubtreeException, NullDegException {
+            @PathVariable String queryS) throws ErrorInputException, NullSubtreeException, NullDegException, FileNotFoundException {
         if (decQuery == null) {
             init();
         }
-        return decQuery.query(queryVertex, queryK, queryS);
+        Gson gson = new Gson();
+        GraphData copyGraph = gson.fromJson(graphJson, GraphData.class);
+
+        Map<Set<String>, Set<Integer>> finalResult = decQuery.query(nodeToindex.get(queryVertex), queryK, queryS);
+        List<String> communityKeywords = new ArrayList<>();
+
+        int clusterID = 1;
+        for (Map.Entry<Set<String>, Set<Integer>> entry : finalResult.entrySet()) {
+            Set<String> keywords = entry.getKey();
+            Set<Integer> vertices = entry.getValue();
+
+            communityKeywords.add(keywords.toString());
+            for (Integer i : vertices) {
+                copyGraph.getNodes().get(i).setCluster(Integer.toString(clusterID));
+            }
+            clusterID ++;
+        }
+        return QueryResult.from(communityKeywords, copyGraph);
     }
 }

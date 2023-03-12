@@ -73,10 +73,10 @@ public class AdjacencyList {
     public void show() {
         for (int i = 0; i < vertexNum; i ++) {
             Vertex vex = vexs.get(i);
-            System.out.print("[" + vex.data + "]->");
+            System.out.print("[" + vex.keywords + "]->");
             EdgeNode node = vex.firstEdge;
             while (node != null) {
-                System.out.print(vexs.get(node.vIndex2).data + "(" + node.vIndex2 + ")->");
+                System.out.print(vexs.get(node.vIndex2).keywords + "(" + node.vIndex2 + ")->");
                 node = node.next;
             }
             System.out.print("null");

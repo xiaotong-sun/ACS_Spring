@@ -84,7 +84,7 @@ public class DecQuery {
                     if (vertex == q) {
                         continue;
                     }
-                    Set<String> keywords = new HashSet<>(this.graph.vexs.get(vertex).data);
+                    Set<String> keywords = new HashSet<>(this.graph.vexs.get(vertex).keywords);
                     if (!keywords.addAll(stringSet)) {
                         community.add(vertex);
                     }
@@ -124,7 +124,7 @@ public class DecQuery {
         List<Set<String>> itemsets = new ArrayList<>();
         for (Integer i : neighbors) {
             Vertex vertex = this.graph.vexs.get(i);
-            Set<String> commonKeywords = vertex.data;
+            Set<String> commonKeywords = vertex.keywords;
             commonKeywords.retainAll(S);
             if (commonKeywords.isEmpty()) {
                 continue;
@@ -220,7 +220,7 @@ public class DecQuery {
         }
         Set<Integer> nodeList = root.nodeList;
         for (int vertex : nodeList) {
-            Set<String> keywords = this.graph.vexs.get(vertex).data;
+            Set<String> keywords = this.graph.vexs.get(vertex).keywords;
             keywords.retainAll(S);
             int size = keywords.size();
             if (size == 0) {

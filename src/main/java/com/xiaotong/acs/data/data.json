@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    {"id": "Norman", "label": "Norman", "keywords": "research, sports, web"},
+    {"id": "John", "label": "John", "keywords": "research"},
+    {"id": "Alex", "label": "Alex", "keywords": "research, sports"},
+    {"id": "Mike", "label": "Mike", "keywords": "research, sports, web"},
+    {"id": "Bob", "label": "Bob", "keywords": "sports, web"},
+    {"id": "Alice", "label": "Alice", "keywords": "sports"},
+    {"id": "Anna", "label": "Anna", "keywords": "research, sports"},
+    {"id": "Amy", "label": "Amy", "keywords": "sports, web"},
+    {"id": "Ada", "label": "Ada", "keywords": "research"},
+    {"id": "Jack", "label": "Jack", "keywords": "research"}
+  ],
+  "edges": [
+    {"source": "Norman", "target": "John"},
+    {"source": "Norman", "target": "Alex"},
+    {"source": "Norman", "target": "Mike"},
+    {"source": "Norman", "target": "Bob"},
+    {"source": "John", "target": "Bob"},
+    {"source": "Bob", "target": "Anna"},
+    {"source": "Mike", "target": "John"},
+    {"source": "Alex", "target": "John"},
+    {"source": "Mike", "target": "Alex"},
+    {"source": "Mike", "target": "Alice"},
+    {"source": "Amy", "target": "Ada"}
+  ]
+}

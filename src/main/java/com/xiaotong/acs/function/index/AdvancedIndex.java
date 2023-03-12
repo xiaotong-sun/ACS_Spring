@@ -134,7 +134,7 @@ public class AdvancedIndex {
     private Map<String, Set<Integer>> buildInvertedList(Set<Integer> nodeList, ArrayList<Vertex> vexs) {
         Map<String, Set<Integer>> invertedList = new HashMap<>();
         for (int i : nodeList) {
-            Set<String> keywords = vexs.get(i).data;
+            Set<String> keywords = vexs.get(i).keywords;
             for (String keyword : keywords) {
                 Set<Integer> vertexSet = new HashSet<>();
                 if (invertedList.containsKey(keyword)) {
