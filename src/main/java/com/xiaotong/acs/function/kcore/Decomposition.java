@@ -2,10 +2,10 @@
  * An O(m) Algorithm for Cores com.Decomposition of Networks.
  */
 
-package com.myfunction.acs.function.kcore;
+package com.xiaotong.acs.function.kcore;
 
 
-import com.myfunction.acs.function.graph.AdjacencyList;
+import com.xiaotong.acs.function.graph.AdjacencyList;
 
 import java.util.ArrayList;
 

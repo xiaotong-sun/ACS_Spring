@@ -1,15 +1,15 @@
-package com.myfunction.acs.controller;
+package com.xiaotong.acs.controller;
 
-import com.myfunction.acs.function.graph.AdjacencyList;
-import com.myfunction.acs.function.graph.EdgeNode;
-import com.myfunction.acs.function.graph.Vertex;
-import com.myfunction.acs.function.index.AdvancedIndex;
-import com.myfunction.acs.function.index.TNode;
-import com.myfunction.acs.function.kcore.Decomposition;
-import com.myfunction.acs.function.kcore.NullDegException;
-import com.myfunction.acs.function.query.DecQuery;
-import com.myfunction.acs.function.query.ErrorInputException;
-import com.myfunction.acs.function.query.NullSubtreeException;
+import com.xiaotong.acs.function.graph.AdjacencyList;
+import com.xiaotong.acs.function.graph.EdgeNode;
+import com.xiaotong.acs.function.graph.Vertex;
+import com.xiaotong.acs.function.index.AdvancedIndex;
+import com.xiaotong.acs.function.index.TNode;
+import com.xiaotong.acs.function.kcore.Decomposition;
+import com.xiaotong.acs.function.kcore.NullDegException;
+import com.xiaotong.acs.function.query.DecQuery;
+import com.xiaotong.acs.function.query.ErrorInputException;
+import com.xiaotong.acs.function.query.NullSubtreeException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

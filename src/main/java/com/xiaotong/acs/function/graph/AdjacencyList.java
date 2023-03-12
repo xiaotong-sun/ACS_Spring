@@ -5,7 +5,7 @@
  *  Insert the edge： graph.insertEdge(new com.EdgeNode(vIndex1, vIndex2));
  */
 
-package com.myfunction.acs.function.graph;
+package com.xiaotong.acs.function.graph;
 
 import java.util.ArrayList;
 

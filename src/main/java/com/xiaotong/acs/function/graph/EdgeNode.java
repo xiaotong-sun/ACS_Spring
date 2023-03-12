@@ -1,4 +1,4 @@
-package com.myfunction.acs.function.graph;
+package com.xiaotong.acs.function.graph;
 
 public class EdgeNode {
     int vIndex1; // The node index at the end of the edge

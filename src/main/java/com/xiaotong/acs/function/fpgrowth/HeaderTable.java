@@ -1,4 +1,4 @@
-package com.myfunction.acs.function.fpgrowth;
+package com.xiaotong.acs.function.fpgrowth;
 
 public class HeaderTable {
     public int frequency;

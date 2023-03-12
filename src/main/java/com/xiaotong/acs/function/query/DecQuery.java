@@ -1,15 +1,15 @@
-package com.myfunction.acs.function.query;
+package com.xiaotong.acs.function.query;
 
-import com.myfunction.acs.function.fpgrowth.FPGrowth;
-import com.myfunction.acs.function.fpgrowth.FPTree;
-import com.myfunction.acs.function.fpgrowth.FPTreeNode;
-import com.myfunction.acs.function.fpgrowth.HeaderTable;
-import com.myfunction.acs.function.graph.AdjacencyList;
-import com.myfunction.acs.function.graph.Vertex;
-import com.myfunction.acs.function.index.AUF;
-import com.myfunction.acs.function.index.TNode;
-import com.myfunction.acs.function.kcore.Decomposition;
-import com.myfunction.acs.function.kcore.NullDegException;
+import com.xiaotong.acs.function.fpgrowth.FPGrowth;
+import com.xiaotong.acs.function.fpgrowth.FPTree;
+import com.xiaotong.acs.function.fpgrowth.FPTreeNode;
+import com.xiaotong.acs.function.fpgrowth.HeaderTable;
+import com.xiaotong.acs.function.graph.AdjacencyList;
+import com.xiaotong.acs.function.graph.Vertex;
+import com.xiaotong.acs.function.index.AUF;
+import com.xiaotong.acs.function.index.TNode;
+import com.xiaotong.acs.function.kcore.Decomposition;
+import com.xiaotong.acs.function.kcore.NullDegException;
 
 import java.util.*;
 

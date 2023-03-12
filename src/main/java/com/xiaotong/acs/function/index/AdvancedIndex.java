@@ -1,11 +1,11 @@
 /**
  * The advanced method, which is used to build the CL-tree index.
  */
-package com.myfunction.acs.function.index;
+package com.xiaotong.acs.function.index;
 
-import com.myfunction.acs.function.graph.AdjacencyList;
-import com.myfunction.acs.function.graph.Vertex;
-import com.myfunction.acs.function.kcore.Decomposition;
+import com.xiaotong.acs.function.graph.AdjacencyList;
+import com.xiaotong.acs.function.graph.Vertex;
+import com.xiaotong.acs.function.kcore.Decomposition;
 
 import java.util.*;
 
