@@ -1,6 +1,7 @@
 package com.xiaotong.acs.controller;
 
 import com.google.gson.Gson;
+import com.xiaotong.acs.domain.InitResult;
 import com.xiaotong.acs.domain.QueryResult;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 import com.xiaotong.acs.function.graph.EdgeNode;
@@ -16,6 +17,8 @@ import com.xiaotong.acs.function.kcore.NullDegException;
 import com.xiaotong.acs.function.query.DecQuery;
 import com.xiaotong.acs.function.query.ErrorInputException;
 import com.xiaotong.acs.function.query.NullSubtreeException;
+import com.xiaotong.acs.function.worldcloud.CloudData;
+import com.xiaotong.acs.function.worldcloud.GetCloudData;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +34,7 @@ public class SearchController {
     private static String graphJson;
 
     @RequestMapping("/init")
-    public static void init() throws FileNotFoundException {
+    public static InitResult init() throws FileNotFoundException {
         GraphData graphData = ReadJsonFile.getGraphData();
         List<Node> nodes = graphData.getNodes();
         List<Edge> edges = graphData.getEdges();
@@ -41,10 +44,12 @@ public class SearchController {
 
         int vertexNum = nodes.size();
         nodeToindex = new HashMap<>();
+        Map<String, Integer> cloudMap = new HashMap<>();
         AdjacencyList graph = new AdjacencyList(vertexNum);
         for (int i = 0; i < vertexNum; i ++) {
             String id = nodes.get(i).getId();
             String keywords = nodes.get(i).getKeywords();
+            GetCloudData.getData(cloudMap, keywords);
             graph.insertVertex(new Vertex(id, keywords));
             nodeToindex.put(id, i);
         }
@@ -67,6 +72,16 @@ public class SearchController {
         TNode root = adv.buildIndex(graph);
         TNode.print(root);
         decQuery = new DecQuery(graph, de, root);
+
+        // obtain word cloud data
+        List<CloudData> cloudDatas = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : cloudMap.entrySet()) {
+            CloudData item = new CloudData();
+            item.setKeyword(entry.getKey());
+            item.setValue(entry.getValue());
+            cloudDatas.add(item);
+        }
+        return InitResult.from(cloudDatas, graphData);
     }
 
     @RequestMapping("/search/{queryVertex}/{queryK}/{queryS}")
