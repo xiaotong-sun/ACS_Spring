@@ -10,6 +10,7 @@ import com.xiaotong.acs.function.index.AUF;
 import com.xiaotong.acs.function.index.TNode;
 import com.xiaotong.acs.function.kcore.Decomposition;
 import com.xiaotong.acs.function.kcore.NullDegException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ class Flag {
     boolean sign = false;
 }
 
+@Slf4j
 public class DecQuery {
     private final AdjacencyList graph;
     private final Decomposition de;
@@ -218,23 +220,28 @@ public class DecQuery {
         if (root == null) {
             return;
         }
-        Set<Integer> nodeList = root.nodeList;
-        for (int vertex : nodeList) {
-            Set<String> keywords = this.graph.vexs.get(vertex).keywords;
-            keywords.retainAll(S);
-            int size = keywords.size();
-            if (size == 0) {
-                continue;
+        Stack<TNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()){
+            TNode node = stack.pop();
+            Set<Integer> nodeList = node.nodeList;
+            for (int vertex : nodeList) {
+                Set<String> keywords = this.graph.vexs.get(vertex).keywords;
+                keywords.retainAll(S);
+                int size = keywords.size();
+                if (size == 0) {
+                    continue;
+                }
+                Set<Integer> value = new HashSet<>();
+                if (verticesSet.containsKey(size)) {
+                    value = verticesSet.get(size);
+                }
+                value.add(vertex);
+                verticesSet.put(size, value);
             }
-            Set<Integer> value = new HashSet<>();
-            if (verticesSet.containsKey(size)) {
-                value = verticesSet.get(size);
+            for (TNode child : node.childList) {
+                stack.push(child);
             }
-            value.add(vertex);
-            verticesSet.put(size, value);
-        }
-        for (TNode child : root.childList) {
-            obtainVerticesSet(child, S, verticesSet);
         }
     }
 

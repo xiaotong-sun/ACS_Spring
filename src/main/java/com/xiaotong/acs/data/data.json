@@ -1,13 +1,13 @@
 {
   "nodes": [
-    {"id": "Norman", "label": "Norman", "keywords": "research, sports, web"},
+    {"id": "Norman", "label": "Norman", "keywords": "research;sports;web"},
     {"id": "John", "label": "John", "keywords": "research"},
-    {"id": "Alex", "label": "Alex", "keywords": "research, sports"},
-    {"id": "Mike", "label": "Mike", "keywords": "research, sports, web"},
-    {"id": "Bob", "label": "Bob", "keywords": "sports, web"},
+    {"id": "Alex", "label": "Alex", "keywords": "research;sports"},
+    {"id": "Mike", "label": "Mike", "keywords": "research;sports;web"},
+    {"id": "Bob", "label": "Bob", "keywords": "sports;web"},
     {"id": "Alice", "label": "Alice", "keywords": "sports"},
-    {"id": "Anna", "label": "Anna", "keywords": "research, sports"},
-    {"id": "Amy", "label": "Amy", "keywords": "sports, web"},
+    {"id": "Anna", "label": "Anna", "keywords": "research;sports"},
+    {"id": "Amy", "label": "Amy", "keywords": "sports;web"},
     {"id": "Ada", "label": "Ada", "keywords": "research"},
     {"id": "Jack", "label": "Jack", "keywords": "research"}
   ],
