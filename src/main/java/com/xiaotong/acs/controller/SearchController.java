@@ -19,6 +19,7 @@ import com.xiaotong.acs.function.query.ErrorInputException;
 import com.xiaotong.acs.function.query.NullSubtreeException;
 import com.xiaotong.acs.function.worldcloud.CloudData;
 import com.xiaotong.acs.function.worldcloud.GetCloudData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/graph")
 public class SearchController {
@@ -59,19 +61,19 @@ public class SearchController {
 
         Decomposition de = new Decomposition(graph);
         int[] deg = de.coresDecomposition();
-        for (int i = 1; i <= vertexNum; i++) {
-            System.out.printf("%2d  ", i);
-        }
-        System.out.println();
-        for (int i : deg) {
-            System.out.printf("%2d  ", i);
-        }
+//        for (int i = 1; i <= vertexNum; i++) {
+//            System.out.printf("%2d  ", i);
+//        }
+//        for (int i : deg) {
+//            System.out.printf("%2d  ", i);
+//        }
 
-        System.out.println();
+        log.info("Core Decomposition Finish!");
         AdvancedIndex adv = new AdvancedIndex();
         TNode root = adv.buildIndex(graph);
-        TNode.print(root);
+//        TNode.print(root);
         decQuery = new DecQuery(graph, de, root);
+        log.info("Build Index Finish");
 
         // obtain word cloud data
         List<CloudData> cloudDatas = new ArrayList<>();
@@ -81,6 +83,8 @@ public class SearchController {
             item.setValue(entry.getValue());
             cloudDatas.add(item);
         }
+        log.info("Word Cloud Finish");
+        log.info("Init Finish");
         return InitResult.from(cloudDatas, graphData);
     }
 

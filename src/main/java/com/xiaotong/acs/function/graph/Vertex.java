@@ -11,7 +11,7 @@ public class Vertex {
 
     public Vertex(String id, String rawData) {
         this.id = id;
-        String[] split = rawData.split(", ");
+        String[] split = rawData.split(";");
         this.keywords.addAll(Arrays.asList(split));
         this.firstEdge = null;
     }

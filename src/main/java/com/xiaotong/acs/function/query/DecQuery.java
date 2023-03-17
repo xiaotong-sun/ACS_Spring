@@ -39,7 +39,7 @@ public class DecQuery {
     public Map<Set<String>, Set<Integer>> query(int q, int k, String string) throws NullDegException, NullSubtreeException, ErrorInputException {
         if (this.de.getDeg()[q] < k)
             throw new ErrorInputException("The input parameter is incorrect. Please re-enter again!");
-        String[] split = string.split(", ");
+        String[] split = string.split(";");
         Set<String> S = new HashSet<>(Arrays.asList(split));
         // Get frequent itemsets, and group these sets by its size.
         List<Set<String>> itemsets = getItemsets(q, k, S);

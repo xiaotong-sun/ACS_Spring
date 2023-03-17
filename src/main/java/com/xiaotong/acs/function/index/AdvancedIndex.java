@@ -6,9 +6,11 @@ package com.xiaotong.acs.function.index;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 import com.xiaotong.acs.function.graph.Vertex;
 import com.xiaotong.acs.function.kcore.Decomposition;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+@Slf4j
 public class AdvancedIndex {
     /**
      * The advanced method builds the
@@ -27,6 +29,10 @@ public class AdvancedIndex {
         Map<Integer, TNode> map0 = new HashMap<>();
         // build index
         while (k >= minCore) {
+            if (mapV.get(k) == null) {
+                k --;
+                continue;
+            }
             List<Integer> listV = mapV.get(k);
             // union the connected vertices in listV.
             Map<Integer, Set<Integer>> anchorTemp = new HashMap<>();
