@@ -1,0 +1,3 @@
+http://localhost:8080/graph/init
+http://localhost:8080/graph/search/0/0/3133,3825,236,874,1072,143,1078,901
+http://localhost:8080/graph/search/Norman/0/research,sports,web

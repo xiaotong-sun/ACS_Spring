@@ -36,7 +36,7 @@ public class SearchController {
     private static String graphJson;
 
     @RequestMapping("/init")
-    public static InitResult init() throws FileNotFoundException {
+    public static InitResult init() throws FileNotFoundException, NullDegException {
         GraphData graphData = ReadJsonFile.getGraphData();
         List<Node> nodes = graphData.getNodes();
         List<Edge> edges = graphData.getEdges();
@@ -70,10 +70,11 @@ public class SearchController {
 
         log.info("Core Decomposition Finish!");
         AdvancedIndex adv = new AdvancedIndex();
-        TNode root = adv.buildIndex(graph);
+        TNode root = adv.buildIndex(graph, de);
+        log.info("Build Index Finish");
+//        TNode.traverseTree(root);
 //        TNode.print(root);
         decQuery = new DecQuery(graph, de, root);
-        log.info("Build Index Finish");
 
         // obtain word cloud data
         List<CloudData> cloudDatas = new ArrayList<>();
@@ -98,7 +99,6 @@ public class SearchController {
         }
         Gson gson = new Gson();
         GraphData copyGraph = gson.fromJson(graphJson, GraphData.class);
-
         Map<Set<String>, Set<Integer>> finalResult = decQuery.query(nodeToindex.get(queryVertex), queryK, queryS);
         List<String> communityKeywords = new ArrayList<>();
 
@@ -113,6 +113,7 @@ public class SearchController {
             }
             clusterID ++;
         }
+        log.info("Finish Searching");
         return QueryResult.from(communityKeywords, copyGraph);
     }
 }

@@ -41,7 +41,7 @@ public class DecQuery {
     public Map<Set<String>, Set<Integer>> query(int q, int k, String string) throws NullDegException, NullSubtreeException, ErrorInputException {
         if (this.de.getDeg()[q] < k)
             throw new ErrorInputException("The input parameter is incorrect. Please re-enter again!");
-        String[] split = string.split(";");
+        String[] split = string.split(",");
         Set<String> S = new HashSet<>(Arrays.asList(split));
         // Get frequent itemsets, and group these sets by its size.
         List<Set<String>> itemsets = getItemsets(q, k, S);
@@ -64,9 +64,11 @@ public class DecQuery {
         Map<Integer, Set<Set<String>>> groupItems = groupFrequentItems(frequentItems);
         // Find the subtre, which contains the query vertex and the core-number of its root is k.
         TNode rootOfCoreK = findSubtreeRk(this.root, q, k);
+        log.info("Find Subtree Root");
         // Find vertices which share keywords with q in the subtree. And group by the number of sharing keyword with S.
         Map<Integer, Set<Integer>> verticesSet = new HashMap<>();
         obtainVerticesSet(rootOfCoreK, S, verticesSet);
+        log.info("Obtain Vertices Set");
         // Find the object communties.
         int var = Collections.max(verticesSet.keySet());
         int loop = Collections.max(groupItems.keySet());
@@ -75,7 +77,6 @@ public class DecQuery {
             if (verticesSet.containsKey(i)) {
                 bigVerticesSet.addAll(verticesSet.get(i));
             }
-
         }
         Map<Set<String>, Set<Integer>> allCommunities = new HashMap<>();
         while (loop >= 1) {
@@ -109,7 +110,7 @@ public class DecQuery {
 
     /**
      * For each vertex of q's neighbors(whose core number is at least k),
-     * we only select the keywords that are contained by S. The we use these
+     * we only select the keywords that are contained by S. Then we use these
      * selected keywords to form an itemset, in which each item is a keyword.
      * Finally, we obtain a list of itemsets.
      * @param q A vertex q ∈ V.
@@ -220,7 +221,7 @@ public class DecQuery {
         if (root == null) {
             return;
         }
-        Stack<TNode> stack = new Stack<>();
+        Deque<TNode> stack = new LinkedList<>();
         stack.push(root);
         while (!stack.isEmpty()){
             TNode node = stack.pop();

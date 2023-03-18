@@ -34,4 +34,34 @@ public class TNode {
             printTree(node, start + "\t");
         }
     }
+
+    public static void traverseTree(TNode root) {
+        if (root == null) {
+            return;
+        }
+        Deque<TNode> stack = new LinkedList<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TNode node = stack.pop();
+
+            System.out.println("----------");
+            System.out.println("stack size = " + stack.size());
+            System.out.println("child size = " + node.childList.size());
+//            System.out.println(node.childList);
+
+            for (int i = 0; i < node.childList.size(); i ++) {
+                stack.push(node.childList.get(i));
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "TNode{" +
+                "coreNum=" + coreNum +
+                ", nodeList=" + nodeList +
+                ", childList=" + childList +
+                ", invertedList=" + invertedList +
+                '}';
+    }
 }

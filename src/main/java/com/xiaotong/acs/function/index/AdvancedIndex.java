@@ -6,6 +6,7 @@ package com.xiaotong.acs.function.index;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 import com.xiaotong.acs.function.graph.Vertex;
 import com.xiaotong.acs.function.kcore.Decomposition;
+import com.xiaotong.acs.function.kcore.NullDegException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -18,9 +19,8 @@ public class AdvancedIndex {
      * @param graph The Graph which is stored in adjacency lsit.
      * @return The root of the CL-tree.
      */
-    public TNode buildIndex(AdjacencyList graph) {
-        Decomposition de = new Decomposition(graph);
-        int[] core = de.coresDecomposition();
+    public TNode buildIndex(AdjacencyList graph, Decomposition de) throws NullDegException {
+        int[] core = de.getDeg();
         int size = graph.vertexNum;
         AUF auf = new AUF(size);
         int k = de.obtainMaxCore();
