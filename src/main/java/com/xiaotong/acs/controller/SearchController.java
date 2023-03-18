@@ -58,7 +58,6 @@ public class SearchController {
         for (Edge edge : edges) {
             graph.insertEdge(new EdgeNode(nodeToindex.get(edge.getSource()), nodeToindex.get(edge.getTarget())));
         }
-
         Decomposition de = new Decomposition(graph);
         int[] deg = de.coresDecomposition();
 //        for (int i = 1; i <= vertexNum; i++) {
@@ -72,6 +71,7 @@ public class SearchController {
         AdvancedIndex adv = new AdvancedIndex();
         TNode root = adv.buildIndex(graph, de);
         log.info("Build Index Finish");
+        // TODO: coreNum 会停留在14上，并且无限递归，什么原因？
 //        TNode.traverseTree(root);
 //        TNode.print(root);
         decQuery = new DecQuery(graph, de, root);
