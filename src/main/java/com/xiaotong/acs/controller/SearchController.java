@@ -94,6 +94,7 @@ public class SearchController {
             @PathVariable String queryVertex,
             @PathVariable int queryK,
             @PathVariable String queryS) throws ErrorInputException, NullSubtreeException, NullDegException, FileNotFoundException {
+        log.info("queryVertex:" + queryVertex + " queryK:" + queryK + " queryS:" + queryS);
         if (decQuery == null) {
             init();
         }

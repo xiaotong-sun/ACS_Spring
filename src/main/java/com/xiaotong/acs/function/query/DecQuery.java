@@ -127,7 +127,7 @@ public class DecQuery {
         List<Set<String>> itemsets = new ArrayList<>();
         for (Integer i : neighbors) {
             Vertex vertex = this.graph.vexs.get(i);
-            Set<String> commonKeywords = vertex.keywords;
+            Set<String> commonKeywords = new HashSet<>(vertex.keywords);
             commonKeywords.retainAll(S);
             if (commonKeywords.isEmpty()) {
                 continue;
@@ -227,7 +227,7 @@ public class DecQuery {
             TNode node = stack.pop();
             Set<Integer> nodeList = node.nodeList;
             for (int vertex : nodeList) {
-                Set<String> keywords = this.graph.vexs.get(vertex).keywords;
+                Set<String> keywords = new HashSet<>(this.graph.vexs.get(vertex).keywords);
                 keywords.retainAll(S);
                 int size = keywords.size();
                 if (size == 0) {
