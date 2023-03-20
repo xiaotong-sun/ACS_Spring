@@ -71,7 +71,6 @@ public class SearchController {
         AdvancedIndex adv = new AdvancedIndex();
         TNode root = adv.buildIndex(graph, de);
         log.info("Build Index Finish");
-        // TODO: coreNum 会停留在14上，并且无限递归，什么原因？
 //        TNode.traverseTree(root);
 //        TNode.print(root);
         decQuery = new DecQuery(graph, de, root);

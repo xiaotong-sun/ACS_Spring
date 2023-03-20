@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class AdjacencyList {
 
-    public ArrayList<Vertex> vexs;
     public int vertexNum;
+    public ArrayList<Vertex> vexs;
     boolean[] visited;
 
     public AdjacencyList(int vertexNum) {
@@ -24,7 +24,7 @@ public class AdjacencyList {
     /**
      * Insert the vertex.
      * For each vertex, we should first create the object as follows:
-     * com.Vertex vertex = new com.Vertex("data");
+     * Vertex vertex = new Vertex("data");
      * @param vertex The vertex to be inserted.
      */
     public void insertVertex(Vertex vertex) {

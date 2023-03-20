@@ -66,8 +66,8 @@ public class AUF {
         } else if (rank[firstRoot] < rank[secondRoot]) {
             parent[firstRoot] = secondRoot;
         } else {
-            parent[firstRoot] = secondRoot;
-            rank[secondRoot] += 1;
+            parent[secondRoot] = firstRoot;
+            rank[firstRoot] += 1;
         }
     }
 }
