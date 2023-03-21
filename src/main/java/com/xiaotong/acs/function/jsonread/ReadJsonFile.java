@@ -12,9 +12,10 @@ public class ReadJsonFile {
      */
     public static GraphData getGraphData() throws FileNotFoundException {
         Gson gson = new Gson();
-        FileReader reader = new FileReader("D:\\javaproject\\ACS\\src\\main\\java\\com\\xiaotong\\acs\\data\\graphData2.json");
+//        FileReader reader = new FileReader("D:\\javaproject\\ACS\\src\\main\\java\\com\\xiaotong\\acs\\data\\graphData2.json");
 //        FileReader reader = new FileReader("D:\\javaproject\\ACS\\src\\main\\java\\com\\xiaotong\\acs\\data\\data.json");
 //        FileReader reader = new FileReader("D:\\javaproject\\ACS\\src\\main\\java\\com\\xiaotong\\acs\\data\\graphData_lastfm.json");
+        FileReader reader = new FileReader("D:\\javaproject\\ACS\\src\\main\\java\\com\\xiaotong\\acs\\data\\graphData_facebook.json");
 
         return gson.fromJson(reader, GraphData.class);
     }

@@ -41,9 +41,6 @@ public class SearchController {
         List<Node> nodes = graphData.getNodes();
         List<Edge> edges = graphData.getEdges();
 
-        Gson gson = new Gson();
-        graphJson = gson.toJson(graphData);
-
         int vertexNum = nodes.size();
         nodeToindex = new HashMap<>();
         Map<String, Integer> cloudMap = new HashMap<>();
@@ -60,19 +57,22 @@ public class SearchController {
         }
         Decomposition de = new Decomposition(graph);
         int[] deg = de.coresDecomposition();
-//        for (int i = 1; i <= vertexNum; i++) {
-//            System.out.printf("%2d  ", i);
-//        }
-//        for (int i : deg) {
-//            System.out.printf("%2d  ", i);
-//        }
+
+        for (int i = 0; i < deg.length; i ++) {
+            nodes.get(i).setCoreNum(deg[i]);
+        }
+
+        Gson gson = new Gson();
+        graphJson = gson.toJson(graphData);
 
         log.info("Core Decomposition Finish!");
         AdvancedIndex adv = new AdvancedIndex();
         TNode root = adv.buildIndex(graph, de);
         log.info("Build Index Finish");
-//        TNode.traverseTree(root);
-//        TNode.print(root);
+/*
+        TNode.traverseTree(root);
+        TNode.print(root);
+*/
         decQuery = new DecQuery(graph, de, root);
 
         // obtain word cloud data
@@ -114,6 +114,6 @@ public class SearchController {
             clusterID ++;
         }
         log.info("Finish Searching");
-        return QueryResult.from(communityKeywords, copyGraph);
+        return QueryResult.from(finalResult, communityKeywords, copyGraph);
     }
 }

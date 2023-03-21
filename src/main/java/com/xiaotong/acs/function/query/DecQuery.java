@@ -40,9 +40,14 @@ public class DecQuery {
      */
     public Map<Set<String>, Set<Integer>> query(int q, int k, String string) throws NullDegException, NullSubtreeException, ErrorInputException {
         if (this.de.getDeg()[q] < k)
-            throw new ErrorInputException("The input parameter is incorrect. Please re-enter again!");
+            throw new ErrorInputException("The input parameter is incorrect. Because K is bigger than deg[q]. Please re-enter again!");
         String[] split = string.split(",");
         Set<String> S = new HashSet<>(Arrays.asList(split));
+        S.retainAll(this.graph.vexs.get(q).keywords);
+        System.out.println(S);
+        if (S.size() == 0) {
+            throw new ErrorInputException("The query keywords is not contained by q's keywords.");
+        }
         // Get frequent itemsets, and group these sets by its size.
         List<Set<String>> itemsets = getItemsets(q, k, S);
         Map<Set<String>, Integer> itemsetsMap = new HashMap<>();
@@ -59,7 +64,7 @@ public class DecQuery {
         FPGrowth mineFrequency = new FPGrowth();
         Set<Set<String>> frequentItems = mineFrequency.mineTree(headerTable, k);
         if (frequentItems.size() == 0) {
-            throw new ErrorInputException("The input parameter is incorrect. Please re-enter again!");
+            throw new ErrorInputException("The input parameter is incorrect, causing there to be no frequent items. Please re-enter again!");
         }
         Map<Integer, Set<Set<String>>> groupItems = groupFrequentItems(frequentItems);
         // Find the subtre, which contains the query vertex and the core-number of its root is k.

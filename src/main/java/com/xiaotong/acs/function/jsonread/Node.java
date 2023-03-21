@@ -7,5 +7,6 @@ public class Node {
     private String id;
     private String label;
     private String keywords;
+    private int coreNum;
     private String cluster;
 }
