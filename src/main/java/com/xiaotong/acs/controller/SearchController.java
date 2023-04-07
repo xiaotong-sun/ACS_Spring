@@ -1,9 +1,14 @@
 package com.xiaotong.acs.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.google.gson.Gson;
 import com.xiaotong.acs.domain.InitResult;
+import com.xiaotong.acs.domain.QueryParam;
 import com.xiaotong.acs.domain.QueryResult;
 import com.xiaotong.acs.domain.Result;
+import com.xiaotong.acs.function.exception.ErrorInputException;
+import com.xiaotong.acs.function.exception.NullDegException;
+import com.xiaotong.acs.function.exception.NullSubtreeException;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 import com.xiaotong.acs.function.graph.EdgeNode;
 import com.xiaotong.acs.function.graph.Vertex;
@@ -12,33 +17,45 @@ import com.xiaotong.acs.function.index.TNode;
 import com.xiaotong.acs.function.jsonread.Edge;
 import com.xiaotong.acs.function.jsonread.GraphData;
 import com.xiaotong.acs.function.jsonread.Node;
-import com.xiaotong.acs.function.jsonread.ReadJsonFile;
 import com.xiaotong.acs.function.kcore.Decomposition;
-import com.xiaotong.acs.function.exception.NullDegException;
 import com.xiaotong.acs.function.query.DecQuery;
-import com.xiaotong.acs.function.exception.ErrorInputException;
-import com.xiaotong.acs.function.exception.NullSubtreeException;
 import com.xiaotong.acs.function.worldcloud.CloudData;
 import com.xiaotong.acs.function.worldcloud.GetCloudData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/graph")
 public class SearchController {
+
     private static DecQuery decQuery;
     private static Map<String, Integer> nodeToIndex;
     private static String graphJson;
 
-    @RequestMapping("/init")
-    public static Result init() throws FileNotFoundException, NullDegException {
-        GraphData graphData = ReadJsonFile.getGraphData();
+    @PostMapping("/init")
+    public static Result init(MultipartFile file) {
+        Result result;
+        // 加载上传的json文件
+        try {
+            graphJson = new String(file.getBytes());
+            log.info("graph json = \n{}", graphJson);
+            result = initGraph();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = Result.error("文件上传失败");
+        } catch (NullDegException e) {
+            result = Result.error("NullDegException");
+        }
+        return result;
+    }
+
+    public static Result initGraph() throws NullDegException {
+        GraphData graphData = JSON.parseObject(graphJson, GraphData.class);
         List<Node> nodes = graphData.getNodes();
         List<Edge> edges = graphData.getEdges();
 
@@ -46,7 +63,7 @@ public class SearchController {
         nodeToIndex = new HashMap<>();
         Map<String, Integer> cloudMap = new HashMap<>();
         AdjacencyList graph = new AdjacencyList(vertexNum);
-        for (int i = 0; i < vertexNum; i ++) {
+        for (int i = 0; i < vertexNum; i++) {
             String id = nodes.get(i).getId();
             String keywords = nodes.get(i).getKeywords();
             GetCloudData.getData(cloudMap, keywords);
@@ -59,7 +76,7 @@ public class SearchController {
         Decomposition de = new Decomposition(graph);
         int[] deg = de.coresDecomposition();
 
-        for (int i = 0; i < deg.length; i ++) {
+        for (int i = 0; i < deg.length; i++) {
             nodes.get(i).setCoreNum(deg[i]);
         }
 
@@ -89,18 +106,14 @@ public class SearchController {
         return Result.ok(InitResult.from(cloudData, graphData));
     }
 
-    @RequestMapping("/search/{queryVertex}/{queryK}/{queryS}")
-    public static Result search(
-            @PathVariable String queryVertex,
-            @PathVariable int queryK,
-            @PathVariable String queryS) throws ErrorInputException, NullSubtreeException, NullDegException, FileNotFoundException {
-        log.info("queryVertex:" + queryVertex + " queryK:" + queryK + " queryS:" + queryS);
+
+    @PostMapping("/search")
+    public static Result search(@RequestBody QueryParam param) throws ErrorInputException, NullSubtreeException, NullDegException {
         if (decQuery == null) {
-            init();
+            return Result.error("图未初始化");
         }
-        Gson gson = new Gson();
-        GraphData copyGraph = gson.fromJson(graphJson, GraphData.class);
-        Map<Set<String>, Set<Integer>> finalResult = decQuery.query(nodeToIndex.get(queryVertex), queryK, queryS);
+        GraphData copyGraph = JSON.parseObject(graphJson, GraphData.class);
+        Map<Set<String>, Set<Integer>> finalResult = decQuery.query(nodeToIndex.get(param.getVertex()), param.getCoreK(), param.getKeywords());
         List<String> communityKeywords = new ArrayList<>();
 
         int clusterID = 1;
@@ -112,7 +125,7 @@ public class SearchController {
             for (Integer i : vertices) {
                 copyGraph.getNodes().get(i).setCluster(Integer.toString(clusterID));
             }
-            clusterID ++;
+            clusterID++;
         }
         log.info("Finish Searching");
         return Result.ok(QueryResult.from(finalResult, communityKeywords, copyGraph));
