@@ -6,7 +6,7 @@ package com.xiaotong.acs.function.index;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 import com.xiaotong.acs.function.graph.Vertex;
 import com.xiaotong.acs.function.kcore.Decomposition;
-import com.xiaotong.acs.function.kcore.NullDegException;
+import com.xiaotong.acs.function.exception.NullDegException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

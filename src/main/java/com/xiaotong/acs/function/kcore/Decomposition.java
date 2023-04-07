@@ -5,6 +5,7 @@
 package com.xiaotong.acs.function.kcore;
 
 
+import com.xiaotong.acs.function.exception.NullDegException;
 import com.xiaotong.acs.function.graph.AdjacencyList;
 
 import java.util.ArrayList;
