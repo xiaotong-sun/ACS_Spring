@@ -37,6 +37,7 @@ public class SearchController {
 
     @RequestMapping("/init")
     public static InitResult init() throws FileNotFoundException, NullDegException {
+        log.info("Begin Init");
         GraphData graphData = ReadJsonFile.getGraphData();
         List<Node> nodes = graphData.getNodes();
         List<Edge> edges = graphData.getEdges();

@@ -44,7 +44,6 @@ public class DecQuery {
         String[] split = string.split(",");
         Set<String> S = new HashSet<>(Arrays.asList(split));
         S.retainAll(this.graph.vexs.get(q).keywords);
-        System.out.println(S);
         if (S.size() == 0) {
             throw new ErrorInputException("The query keywords is not contained by q's keywords.");
         }
