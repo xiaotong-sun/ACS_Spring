@@ -1,5 +1,7 @@
 package com.xiaotong.acs.function.query;
 
+import com.xiaotong.acs.function.exception.ErrorInputException;
+import com.xiaotong.acs.function.exception.NullSubtreeException;
 import com.xiaotong.acs.function.fpgrowth.FPGrowth;
 import com.xiaotong.acs.function.fpgrowth.FPTree;
 import com.xiaotong.acs.function.fpgrowth.FPTreeNode;
@@ -9,7 +11,7 @@ import com.xiaotong.acs.function.graph.Vertex;
 import com.xiaotong.acs.function.index.AUF;
 import com.xiaotong.acs.function.index.TNode;
 import com.xiaotong.acs.function.kcore.Decomposition;
-import com.xiaotong.acs.function.kcore.NullDegException;
+import com.xiaotong.acs.function.exception.NullDegException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
