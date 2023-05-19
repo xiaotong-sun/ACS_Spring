@@ -43,7 +43,7 @@ public class SearchController {
         // 加载上传的json文件
         try {
             graphJson = new String(file.getBytes());
-            log.info("graph json = \n{}", graphJson);
+//            log.info("graph json = \n{}", graphJson);
             result = initGraph();
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,6 +112,7 @@ public class SearchController {
         if (decQuery == null) {
             return Result.error("图未初始化");
         }
+        log.info("Begin Searching");
         GraphData copyGraph = JSON.parseObject(graphJson, GraphData.class);
         Map<Set<String>, Set<Integer>> finalResult = decQuery.query(nodeToIndex.get(param.getVertex()), param.getCoreK(), param.getKeywords());
         List<String> communityKeywords = new ArrayList<>();
@@ -123,7 +124,7 @@ public class SearchController {
 
             communityKeywords.add(keywords.toString());
             for (Integer i : vertices) {
-                copyGraph.getNodes().get(i).setCluster(Integer.toString(clusterID));
+                copyGraph.getNodes().get(i).getCluster().add(clusterID);
             }
             clusterID++;
         }
