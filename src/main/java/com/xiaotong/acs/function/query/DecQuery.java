@@ -51,6 +51,7 @@ public class DecQuery {
         }
         // Get frequent itemsets, and group these sets by its size.
         List<Set<String>> itemsets = getItemsets(q, k, S);
+        System.out.println(itemsets);
         Map<Set<String>, Integer> itemsetsMap = new HashMap<>();
         for (Set<String> itemset : itemsets) {
             int frequency = 0;
@@ -59,6 +60,7 @@ public class DecQuery {
             }
             itemsetsMap.put(itemset, frequency + 1);
         }
+        System.out.println(itemsetsMap);
         FPTree fpTree = new FPTree();
         FPTreeNode fpTreeRoot = fpTree.buildFPTree(itemsetsMap, k);
         Map<String, HeaderTable> headerTable = fpTree.getHeaderTable();
@@ -108,10 +110,19 @@ public class DecQuery {
                     bigVerticesSet.addAll(verticesSet.get(loop));
                 }
             } else {
-                break;
+                Map<Set<String>, Set<Integer>> connectedCommunities = getConnectedCommunities(allCommunities, this.graph, q);
+                if (connectedCommunities.isEmpty()) {
+                    allCommunities = new HashMap<>();
+                    loop --;
+                    if (verticesSet.containsKey(loop)) {
+                        bigVerticesSet.addAll(verticesSet.get(loop));
+                    }
+                    continue;
+                }
+                return connectedCommunities;
             }
         }
-        return getConnectedCommunities(allCommunities, this.graph, q);
+        return new HashMap<>();
     }
 
     /**
