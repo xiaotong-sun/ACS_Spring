@@ -51,7 +51,6 @@ public class DecQuery {
         }
         // Get frequent itemsets, and group these sets by its size.
         List<Set<String>> itemsets = getItemsets(q, k, S);
-        System.out.println(itemsets);
         Map<Set<String>, Integer> itemsetsMap = new HashMap<>();
         for (Set<String> itemset : itemsets) {
             int frequency = 0;
@@ -60,7 +59,6 @@ public class DecQuery {
             }
             itemsetsMap.put(itemset, frequency + 1);
         }
-        System.out.println(itemsetsMap);
         FPTree fpTree = new FPTree();
         FPTreeNode fpTreeRoot = fpTree.buildFPTree(itemsetsMap, k);
         Map<String, HeaderTable> headerTable = fpTree.getHeaderTable();
